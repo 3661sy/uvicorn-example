@@ -14,11 +14,15 @@
 #     })
 
 class Response:
+    def __init__(self, content, status = 200) -> None:
+        self.status = status
+        self.body = content
+    
     async def __call__(self, scope, receive, send):
         await send(
             {
                 'type': 'http.response.start',
-                'status': 200,
+                'status': self.status,
                 'header': [
                     [b'content-type', b'text/plain']
                 ]
@@ -28,7 +32,7 @@ class Response:
         await send(
             {
                 'type': 'http.response.body',
-                'body': b'Hello.world'
+                'body': self.body
             }
         )
 
