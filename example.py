@@ -17,6 +17,7 @@ from responses import JSONResponse
 
 class Server:
     async def __call__(self, scope, receive, send):
+        print(scope)
         self.scope = scope
         self.receive = receive
         self.send = send
