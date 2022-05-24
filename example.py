@@ -13,38 +13,16 @@
 #         'body': b'Hello, world!',
 #     })
 
-class Response:
-    def __init__(self, content, status = 200) -> None:
-        self.status = status
-        self.body = content
-    
-    async def __call__(self, scope, receive, send):
-        await send(
-            {
-                'type': 'http.response.start',
-                'status': self.status,
-                'header': [
-                    [b'content-type', b'text/plain']
-                ]
-            }
-        )
+from responses import JSONResponse
 
-        await send(
-            {
-                'type': 'http.response.body',
-                'body': self.body
-            }
-        )
-
-
-class Test:
+class Server:
     async def __call__(self, scope, receive, send):
         self.scope = scope
         self.receive = receive
         self.send = send
 
-        response = Response()
+        response = JSONResponse(content={'data': "data"})
 
         await response(scope, receive, send)
 
-app = Test()
+app = Server()
